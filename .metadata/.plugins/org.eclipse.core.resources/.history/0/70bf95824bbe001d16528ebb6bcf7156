@@ -1,0 +1,59 @@
+package com.shop.repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.shop.dto.MemberFormDto;
+import com.shop.entity.Cart;
+import com.shop.entity.Member;
+
+@SpringBootTest
+@Transactional
+@TestPropertySource(locations="Classpath:application-test.properties")
+class CartRepositoryTests {
+	
+	
+	@Autowired
+	CartRepository cartRepository;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	MemberRepository memberRepository;
+	
+	@PersistenceContext
+	EntityManager em;
+	
+	public Member createMember() {
+		MemberFormDto formDto = new MemberFormDto();
+		
+		formDto.setEmail("test@google.com");
+		formDto.setName("홍길동");
+		formDto.setAddress("서울시 마포구");
+		formDto.setPassword("1234");
+		return Member.createMember(formDto, passwordEncoder);
+		
+		
+	}
+	
+	@Test
+	public void findCartAndMember() {
+		
+		Member member = this.createMember();
+		MemberRepository.save(member);
+		
+		Cart cart = new Cart();
+		cart.setMember(member);
+		cartRepository.save(member);
+	}
+	
+
+}

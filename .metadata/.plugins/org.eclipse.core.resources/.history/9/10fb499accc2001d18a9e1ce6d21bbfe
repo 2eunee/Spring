@@ -1,0 +1,10 @@
+package com.shop.repository;
+
+import org.springframework.data.domain.Page;
+
+import com.shop.entity.Item;
+
+public interface ItemReponsitory {
+	Page<Item> getAdminItemPage(ItemSearchDto, itemsearchDto, Pageable pageable);
+
+}

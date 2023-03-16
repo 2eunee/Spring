@@ -1,0 +1,41 @@
+package com.shop.repository;
+
+import javax.persistence.EntityManager;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shop.constant.ItemSellStatus;
+import com.shop.dto.ItemSearchDto;
+import com.shop.entity.Item;
+import com.shop.entity.QItem;
+
+public class ItemReponsitoryCustomImpl implements ItemReponsitoryCustom{
+	
+	private JPAQueryFactory queryFactory;
+	
+	public ItemReponsitoryCustomImpl(EntityManager em) {
+		this.queryFactory = new JPAQueryFactory(em);
+	}
+	
+	private BooleanExpression searchSellStatusEq(ItemSellStatus searchSellStatus) {
+		return searchSellStatus ==
+				null? null : QItem.item.itemSellStatus.eq(searchSellStatus);
+	}
+	
+	//날짜로 조회
+	//all 전체, 1d:하루, 1w:한주, 1m:한달, 6m:최근 6개월 동안 등록한 상품
+	private BooleanExpression regDtsAfter(String searchDataType) {
+		return null;
+	}
+
+	@Override
+	public Page<Item> getAdminItemPage(ItemSearchDto itemsearchDto, Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+}

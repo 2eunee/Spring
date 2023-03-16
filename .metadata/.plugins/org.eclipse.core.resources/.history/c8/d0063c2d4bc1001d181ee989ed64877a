@@ -1,0 +1,23 @@
+package com.shop.service;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class FileService {
+	public String uploadFile(String uploadPath, String originalFileName, byte[] fileDate) {
+		
+		UUID uuid = UUID.randomUUID();				
+		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+											//lastIndexOf("."))가 있으면 test.jpg로 저장시 .jpg 빼고 저장
+		
+		log.info("extension===>" + extension);
+		
+		return null;
+	}
+
+}

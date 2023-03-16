@@ -1,0 +1,18 @@
+package com.shop.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.shop.repository.ItemImgRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class ItemImgService {
+	
+	private final ItemImgRepository itemImgRepository;
+	private final FileService fileService;
+
+}

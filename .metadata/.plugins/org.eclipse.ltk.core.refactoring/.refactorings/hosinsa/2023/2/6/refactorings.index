@@ -1,0 +1,44 @@
+1675644075742	Rename package 'com.ezen.hosinsa'
+1675649531581	Rename package 'org.zerock.persistence'
+1675656149415	Copy compilation unit
+1675656190593	Copy compilation unit
+1675665210963	Delete element
+1675665830548	Rename package 'hosinsa.Mapper'
+1675665846369	Delete element
+1675665992224	Rename type 'Service'
+1675668549717	Rename type 'BoardVO'
+1675670192172	Rename compilation unit 'ProBoardVO.java'
+1675671109036	Rename type 'CartController'
+1675671153397	Rename type 'BoardMapper'
+1675671263409	Rename resource 'CartMapper.xml'
+1675671512086	Rename type 'CartMapperTests'
+1675672903963	Move folder
+1675751936497	Move compilation units
+1675757513763	Delete element
+1675758648198	Delete element
+1675758656427	Delete element
+1675758659317	Delete element
+1675758665136	Delete element
+1675758844491	Delete element
+1675759118361	Rename resource 'home.jsp'
+1675759215465	Delete element
+1675819603365	Move file
+1675822112082	Move file
+1675904331471	Copy compilation unit
+1675904376401	Copy compilation unit
+1675904399287	Copy compilation units
+1675904446165	Copy compilation unit
+1675904512939	Delete element
+1675904520141	Delete element
+1675904527710	Delete element
+1675904534569	Delete element
+1675904690937	Delete element
+1675904701420	Copy compilation unit
+1675904788655	Delete element
+1675904837672	Rename package 'hosinsa.mapper'
+1675904899178	Rename package 'hosinsa.controller'
+1675905684234	Move file
+1675905691957	Delete element
+1675997902030	Rename resource 'ReviewReply.xml'
+1676001535200	Rename type 'ReviewReply'
+1676001538661	Rename type 'ReviewReplyTests'

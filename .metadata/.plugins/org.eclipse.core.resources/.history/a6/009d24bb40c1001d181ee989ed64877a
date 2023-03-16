@@ -1,0 +1,30 @@
+package com.shop.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.shop.constant.ItemSellStatus;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter@Getter
+public class ItemFormDto {
+	
+	private Long id;
+	
+	private String itemNm;
+	
+	private Integer price;
+	
+	private String itemDetail;
+	
+	private Integer stockNumber;
+	
+	private ItemSellStatus itemSellStatus;
+	
+	private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+	
+	private List<Long> itemImgIds = null;
+
+}

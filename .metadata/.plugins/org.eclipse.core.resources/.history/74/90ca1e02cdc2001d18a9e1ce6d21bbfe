@@ -1,0 +1,10 @@
+package com.shop.repository;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+public class ItemReponsitoryImpl implements ItemReponsitoryCustom{
+	
+	private JPAQueryFactory queryFactory;
+	
+
+}

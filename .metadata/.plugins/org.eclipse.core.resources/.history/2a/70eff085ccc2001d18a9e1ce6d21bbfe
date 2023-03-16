@@ -1,0 +1,19 @@
+package com.shop.dto;
+
+import com.shop.constant.ItemSellStatus;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter@Setter
+public class ItemSearchDto {
+	
+	private String searchDateType; //현재시간 기준 조회
+	
+	private ItemSellStatus searchSellStatus; //판매상품 기준 조회
+	
+	private String searchBy;
+	
+	private String searchQuery="";
+
+}

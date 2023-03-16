@@ -1,0 +1,33 @@
+package com.shop.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
+
+import com.shop.entity.Item;
+
+public interface ItemRepository extends JpaRepository<Item, Long>,
+		QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
+	
+	//@Query("select * from item where price = 100005")
+	@Query("select i from Item i where i.price >= :price")
+	List<Item> findByPrice(@Param("price") int pr);
+//	List<Item> findByPrice(int price);
+	
+//	@Query("select i from Item i where itemNm like %:itemNm%")   //jpql문법
+	@Query(value="select * from item where item_nm like %:itemNm%", nativeQuery = true)  //sql 문법
+	List<Item> findByitemNm(@Param("itemNm") String itemNm);
+	
+	List<Item> findItemByitemDetail(String itemDetail);
+	
+	@Query("select i from Item i where i.itemNm like :itemNm or i.itemDetail like :itemDetail")
+	List<Item> findByItemNmOrItemDetail2(@Param("itemNm") String itemNm, @Param("itemDetail") String itemDetial);
+	
+	List<Item> findByPriceLessThan(Integer price);
+	
+	List<Item> findByPriceLessThanOrderByIdDesc(Integer price);
+	
+}

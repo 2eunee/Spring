@@ -1,0 +1,18 @@
+package com.shop.service;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class FileService {
+	public String uploadFile(String uploadPath, String originalFileName, byte[] fileDate) {
+		
+		UUID uuid = UUID.randomUUID();
+		return null;
+	}
+
+}

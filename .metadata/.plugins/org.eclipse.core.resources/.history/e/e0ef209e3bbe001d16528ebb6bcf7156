@@ -1,0 +1,237 @@
+package com.shop.repository;
+
+import static com.shop.entity.QItem.item;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.apache.logging.log4j.util.PerformanceSensitive;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.thymeleaf.util.StringUtils;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shop.constant.ItemSellStatus;
+import com.shop.entity.Item;
+import com.shop.entity.QItem;
+import com.shop.repository.ItemRepository;
+
+@SpringBootTest
+class ItemRepositoryTests {
+	
+	@Autowired
+	ItemRepository itemRepository;
+	
+	@PersistenceContext
+	EntityManager em;
+
+	private Page<Item> findAll;
+	
+	
+	public void createItemList2() {
+		for(int i=1; i<=5; i++) {
+			Item item = new Item();
+			item.setItemNm("테스트 상품"+i);
+			item.setPrice(10000+i);
+			item.setItemDetail("테스트 상품 상세 설명"+i);
+			item.setItemSellStatus(ItemSellStatus.SELL);
+			item.setStockNumber(100);
+			item.setRegTime(LocalDateTime.now());
+			item.setUpdatTime(LocalDateTime.now());
+			itemRepository.save(item);
+		}
+		
+		for(int i=6; i<=10; i++) {
+			Item item = new Item();
+			item.setItemNm("테스트 상품"+i);
+			item.setPrice(10000+i);
+			item.setItemDetail("테스트 상품 상세 설명"+i);
+			item.setItemSellStatus(ItemSellStatus.SOLD_OUT);
+			item.setStockNumber(0);
+			item.setRegTime(LocalDateTime.now());
+			item.setUpdatTime(LocalDateTime.now());
+			itemRepository.save(item);
+		}
+	}
+	
+	@Test
+	@DisplayName("Querydsl 조회2")
+	public void queryDslTests2() {
+		this.createItemList2();
+		
+		BooleanBuilder booleanBuilder = new BooleanBuilder();
+		
+		QItem item = QItem.item;
+		
+		String itemDetail = "테스트 상품 상세 설명";
+		int price = 10003;
+		String itemSellStat = "SELL";
+		
+		booleanBuilder.and(item.itemDetail.like("%" + itemDetail + "%"));
+		booleanBuilder.and(item.price.gt(price));
+		
+		if(StringUtils.equals(itemSellStat, ItemSellStatus.SELL)) {
+			booleanBuilder.and(item.itemSellStatus.eq(ItemSellStatus.SELL));
+		}
+		
+		Pageable pageable = PageRequest.of(0, 5);
+		Page<Item> itemPagingResult = itemRepository.findAll(booleanBuilder, pageable);
+		
+		System.out.println("total : " + itemPagingResult.getTotalElements());
+		
+		itemPagingResult.getContent().forEach(n->System.out.println("==>" + n));;
+	}
+	
+	
+	
+	
+	
+	
+	//select * from item where
+	@Test
+	@DisplayName("Query1 조회 테스트")
+	public void queryDslTests() {
+		this.createItemList();
+		
+		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+		
+		queryFactory
+//				.select(qItem)
+//				.from(qItem)
+				.selectFrom(item)
+				.where(item.itemSellStatus.eq(ItemSellStatus.SELL))
+				.where(item.price.gt(10005))
+				.orderBy(item.price.desc())
+				.fetch()
+				.forEach(n->System.out.println(n));
+	}
+	
+	public void createItemList() {
+		for(int i=0; i<=10; i++) {
+			Item item = new Item();
+			
+			item.setItemNm("테스트 상품"+i);
+			item.setPrice(10000+i);
+			item.setItemDetail("테스트상품 상세" + i);
+			item.setItemSellStatus(ItemSellStatus.SELL);
+			item.setStockNumber(100);
+			item.setRegTime(LocalDateTime.now());
+			item.setUpdatTime(LocalDateTime.now());
+			itemRepository.save(item);
+		}
+	}
+	
+	@Test
+	@DisplayName("Price")
+	public void findByPriceTests() {
+		this.createItemList();
+		itemRepository.findByPrice(10005)
+		.forEach(n->System.out.println(n));
+	}
+	
+	
+	@Test
+	@DisplayName("Price 조회 테스트")
+	public void findByPriceLessThanTests() {
+		this.createItemList();
+		List<Item> itemList 
+		= itemRepository.findByPriceLessThanOrderByIdDesc(10005);
+		
+		
+		for(Item item : itemList)
+			System.out.println("item : " + item);
+		
+	}
+
+	@Test
+	@DisplayName("OR 조회 테스트")
+	public void findItemByitemNmOritemDetailTests() {
+		createItemList();
+		List<Item> itemList 
+		= itemRepository.findByItemNmOrItemDetail2("테스트 상품1","테스트상품 상세3");
+		
+		for(Item item : itemList)
+			System.out.println("item : " + item);
+		
+	}
+	
+	
+	@Test
+	@DisplayName("페이징처리")
+	public void pageTests() {
+		this.createItemList();
+		
+//		Pageable pageable = PageRequest.of(1, 5);
+		Pageable pageable = PageRequest.of(1, 5,Sort.by("price").descending());
+		Page<Item> pageList = itemRepository.findAll(pageable);
+		
+		for(Item i : pageList)
+			System.out.println(i);
+	}
+	
+	@Test
+	@DisplayName("상품명 조회 테스트")
+	public void findByItemNmtests() {
+		createItemList();
+		List<Item> itemList = itemRepository.findByitemNm("테스트");
+		
+		for(Item item : itemList)
+			System.out.println("item : " + item);
+		
+	}
+	
+	@Test
+	@DisplayName("상세설명 조회 테스트")
+	public void findByItemDetailTests() {
+		createItemList();
+		List<Item> findItemByitemDetail = 
+				itemRepository.findItemByitemDetail("테스트상품 상세3");
+		
+		for(Item item : findItemByitemDetail)
+			System.out.println("item : " + item);
+		
+	}
+	
+	
+	
+	
+	@Test
+	@DisplayName("상품 저장 테스트")
+	public void createItemTests() {
+		Item item = new Item();
+		
+		item.setItemNm("테스트 상품");
+		item.setPrice(10000);
+		item.setItemDetail("테스트 상품 상세 설명");
+		item.setItemSellStatus(ItemSellStatus.SELL);
+		item.setStockNumber(100);
+		item.setRegTime(LocalDateTime.now());
+		item.setUpdatTime(LocalDateTime.now());
+		
+		itemRepository.save(item);
+		System.out.println(item);
+		item.setPrice(20000);
+		System.err.println("----------------------------------");
+		System.out.println(item);
+		
+		
+		
+	}
+	
+	
+	
+
+}
